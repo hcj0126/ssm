@@ -1,0 +1,79 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.hcj.mapper.UserMapper">
+    <sql id="sqlFieldUser">
+        id,username,phone,password,email,status
+    </sql>
+
+    <sql id="sqlFeildRole">
+        id,roleName,roleDesc
+    </sql>
+
+    <!--根据手机号码查询用户-->
+    <select id="queryUserByPhone" parameterType="string" resultType="User">
+        select
+        <include refid="sqlFieldUser" />
+        from user
+        where phone=#{phone}
+    </select>
+
+    <!--根据手机号码修改密码-->
+    <update id="updateUserByPassword" parameterType="string">
+        update user set password=#{password} where phone=#{phone}
+    </update>
+
+    <!--查询所有用户列表-->
+    <select id="queryUserListAll" resultType="User">
+        select
+        <include refid="sqlFieldUser" />
+        from user
+    </select>
+    
+    <!--新增用户-->
+    <insert id="addUser" parameterType="User">
+        insert into user (username,phone,password,email,status)values(#{username},#{phone},#{password},#{email},#{status})
+    </insert>
+
+    <!--根据id查询用户-->
+    <!--<select id="queryUserById" parameterType="int" resultType="User">
+        select
+        <include refid="sqlField" />
+        from USER
+        where id=#{id}
+    </select>-->
+
+    <!--根据id查询用户不配备的其他角色-->
+    <select id="selectUserByIdAndOtherAllRoles" parameterType="int" resultType="Role">
+        select
+        <include refid="sqlFeildRole"/>
+        from role
+        where id not in
+        (select roleId from user_role where userId=#{id})
+    </select>
+
+    <!---->
+    <insert id="insertUserAndOtherRoles" parameterType="int">
+        insert into user_role (userId,roleId)values(#{userId},#{roleId});
+    </insert>
+
+    <!--<insert id="insertUserAndOtherRoles" parameterType="arraylist">
+        &lt;!&ndash;遍历roleIds集合&ndash;&gt;
+        <foreach collection="array" open="roleId in (" item="roleIds" separator="," close=")">
+            insert into user_role (userId,roleId)values(#{userId},#{roleId});
+        </foreach>
+    </insert>-->
+
+    <!--根据搜索条件查询所有用户列表-->
+    <select id="queryUserListBySeach" parameterType="string" resultType="User">
+        select
+        <include refid="sqlFieldUser" />
+        from user
+        <where>
+            <if test="seach !=null and seach!= '' ">
+                username like '%${seach}%'
+            </if>
+        </where>
+    </select>
+
+</mapper>

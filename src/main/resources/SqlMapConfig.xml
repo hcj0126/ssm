@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE configuration PUBLIC "-//mybatis.org//DTD Config 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-config.dtd">
+
+<configuration>
+
+    <!--起别名-->
+    <typeAliases>
+        <package name="com.hcj.domain"/>
+    </typeAliases>
+
+    <!--引入pagehelper分页插件-->
+    <!--注意：在版本5.0之前你写PageHelper是没问题的，但是5.0之后要写成PageInterceptor，
+        加入拦截器插件-->
+    <plugins>
+        <plugin interceptor="com.github.pagehelper.PageInterceptor">
+            <!--reasonable:分页合理化参数，默认值是false,直接根据参数查询
+            如果value='true'当pageNum<=0时就会查询第一页
+            当pageNum>pages(总页数)，也就是最后一页，一直会查询最后一页
+            -->
+            <property name="reasonable" value="true"/>
+        </plugin>
+    </plugins>
+
+</configuration>

@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.hcj.mapper.ProductMapper">
+    <!--根据搜索条件查询所有用户列表-->
+    <select id="queryProductListBySeach" parameterType="string" resultType="Product">
+        select * from product
+        <where>
+            <if test="seach !=null and seach!= '' ">
+                productName like '%${seach}%'
+            </if>
+        </where>
+    </select>
+
+    <!--根据id批量删除-->
+    <delete id="batchDeleteProductByIds">
+        delete from product
+        where id in
+        <foreach item="id" collection="array" open="("  separator="," close=")">
+            #{id}
+        </foreach>
+    </delete>
+
+
+</mapper>
